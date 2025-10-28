@@ -1,6 +1,6 @@
 # Supabase Self-Hosted Cloud Deployment
 
-🚀 **Production-ready Supabase setup with secure configurations for cloud deployment**
+🚀 **Production-ready Supabase self-hosted setup with secure configuration, S3 storage, BigQuery analytics, and multi-cloud deployment scripts for AWS, GCP, and Azure**
 
 ## ✨ Features
 
@@ -29,8 +29,8 @@
 ### Local Development
 ```bash
 # Clone repository
-git clone <your-repo-url>
-cd supabase-cloud-deployment
+git clone https://github.com/DrAkhilKolli/supabase-selfhosted-deployment.git
+cd supabase-selfhosted-deployment
 
 # Start services
 docker compose up -d
@@ -41,14 +41,14 @@ open http://localhost:8000
 
 ### Cloud Deployment
 ```bash
-# AWS
+# AWS ECS Fargate
 ./deployment/deploy-aws.sh
 
-# Google Cloud
-./deployment/deploy-gcp.sh
+# Google Cloud Run
+./deployment/scripts/deploy-gcp.sh -p your-project-id
 
-# Azure
-./deployment/deploy-azure.sh
+# Azure Container Instances
+./deployment/scripts/deploy-azure.sh -g myResourceGroup -r myRegistry
 ```
 
 ## 🔐 Security Configuration
@@ -100,7 +100,7 @@ Key variables in `.env`:
 ## 📚 Documentation
 
 - [Analytics Configuration](ANALYTICS_CONFIG.md)
-- [Cloud Deployment Guide](deployment/README.md)
+- [Deployment Guide](DEPLOYMENT.md)
 - [Security Best Practices](docs/SECURITY.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 
