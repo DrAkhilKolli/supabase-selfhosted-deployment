@@ -1,0 +1,60 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+README.md
+LICENSE
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules
+npm-debug.log
+
+# Test files
+test
+tests
+**/*.test.ts
+**/*.spec.ts
+
+# Build artifacts
+dist
+build
+target
+
+# AWS
+aws-cloudformation.yaml
+deploy-*.sh
+test-*.sh
+parameters.json
+*.pem
+
+# Logs
+*.log
+logs
+
+# Temp files
+tmp
+temp
+*.tmp
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
