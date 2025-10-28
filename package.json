@@ -1,0 +1,13 @@
+{
+  "name": "platform-api-mock",
+  "version": "1.0.0",
+  "description": "Mock platform API for local Supabase Studio",
+  "main": "platform-api-mock.js",
+  "scripts": {
+    "start": "node platform-api-mock.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}

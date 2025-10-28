@@ -1,0 +1,208 @@
+name: supabase-multi
+
+services:
+  # Project 1 - Default (existing)
+  db-project1:
+    container_name: supabase-db-project1
+    image: supabase/postgres:15.8.1.085
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: project1_db
+    volumes:
+      - ./volumes/db-project1:/var/lib/postgresql/data:Z
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "project1_db"]
+      timeout: 5s
+      interval: 5s
+      retries: 5
+
+  # Project 2 - New
+  db-project2:
+    container_name: supabase-db-project2
+    image: supabase/postgres:15.8.1.085
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: project2_db
+    volumes:
+      - ./volumes/db-project2:/var/lib/postgresql/data:Z
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "project2_db"]
+      timeout: 5s
+      interval: 5s
+      retries: 5
+
+  # Project 3 - New
+  db-project3:
+    container_name: supabase-db-project3
+    image: supabase/postgres:15.8.1.085
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: project3_db
+    volumes:
+      - ./volumes/db-project3:/var/lib/postgresql/data:Z
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - log_min_messages=fatal
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "project3_db"]
+      timeout: 5s
+      interval: 5s
+      retries: 5
+
+  # REST API for Project 1
+  rest-project1:
+    container_name: supabase-rest-project1
+    image: postgrest/postgrest:v13.0.7
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    depends_on:
+      db-project1:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgresql://authenticator:${POSTGRES_PASSWORD}@db-project1:5432/project1_db
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+
+  # REST API for Project 2
+  rest-project2:
+    container_name: supabase-rest-project2
+    image: postgrest/postgrest:v13.0.7
+    restart: unless-stopped
+    ports:
+      - "3002:3000"
+    depends_on:
+      db-project2:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgresql://authenticator:${POSTGRES_PASSWORD}@db-project2:5432/project2_db
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+
+  # REST API for Project 3
+  rest-project3:
+    container_name: supabase-rest-project3
+    image: postgrest/postgrest:v13.0.7
+    restart: unless-stopped
+    ports:
+      - "3003:3000"
+    depends_on:
+      db-project3:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgresql://authenticator:${POSTGRES_PASSWORD}@db-project3:5432/project3_db
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+      PGRST_APP_SETTINGS_JWT_SECRET: ${JWT_SECRET}
+      PGRST_APP_SETTINGS_JWT_EXP: ${JWT_EXPIRY}
+
+  # Auth for Project 1
+  auth-project1:
+    container_name: supabase-auth-project1
+    image: supabase/gotrue:v2.180.0
+    restart: unless-stopped
+    ports:
+      - "9999:9999"
+    depends_on:
+      db-project1:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: ${API_EXTERNAL_URL}
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgresql://supabase_auth_admin:${POSTGRES_PASSWORD}@db-project1:5432/project1_db
+      GOTRUE_SITE_URL: ${SITE_URL}
+      GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS}
+      GOTRUE_DISABLE_SIGNUP: ${DISABLE_SIGNUP}
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: ${JWT_EXPIRY}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: ${ENABLE_EMAIL_SIGNUP}
+      GOTRUE_EXTERNAL_PHONE_ENABLED: ${ENABLE_PHONE_SIGNUP}
+      GOTRUE_SMS_AUTOCONFIRM: ${ENABLE_PHONE_AUTOCONFIRM}
+
+  # Meta service for Project 1
+  meta-project1:
+    container_name: supabase-meta-project1
+    image: supabase/postgres-meta:v0.93.0
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      db-project1:
+        condition: service_healthy
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db-project1
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: project1_db
+      PG_META_DB_USER: supabase_admin
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      CRYPTO_KEY: ${PG_META_CRYPTO_KEY}
+
+  # API Gateway for all projects
+  kong-multi:
+    container_name: supabase-kong-multi
+    image: kong:2.8.1
+    restart: unless-stopped
+    entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+    ports:
+      - "8001:8000"  # Project 1
+      - "8002:8001"  # Admin API
+      - "8444:8443"  # HTTPS
+    depends_on:
+      - rest-project1
+      - rest-project2 
+      - rest-project3
+      - auth-project1
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
+    volumes:
+      - ./volumes/kong-multi.yml:/home/kong/temp.yml:ro
+
+volumes:
+  db-project1:
+  db-project2:
+  db-project3:

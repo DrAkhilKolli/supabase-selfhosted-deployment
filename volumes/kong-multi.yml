@@ -1,0 +1,166 @@
+_format_version: "2.1"
+_transform: true
+
+###
+### Project 1 Routes
+###
+
+services:
+  # REST API for Project 1
+  - name: rest-project1
+    url: http://rest-project1:3000/
+    routes:
+      - name: rest-project1
+        strip_path: true
+        paths:
+          - "/project1/rest/v1/"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          hide_credentials: false
+
+  # Auth for Project 1  
+  - name: auth-project1
+    url: http://auth-project1:9999/
+    routes:
+      - name: auth-project1
+        strip_path: true
+        paths:
+          - "/project1/auth/v1/"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: cors
+
+  # Meta for Project 1
+  - name: meta-project1
+    url: http://meta-project1:8080/
+    routes:
+      - name: meta-project1
+        strip_path: true
+        paths:
+          - "/project1/pg/"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          hide_credentials: false
+
+###
+### Project 2 Routes
+###
+
+  # REST API for Project 2
+  - name: rest-project2
+    url: http://rest-project2:3000/
+    routes:
+      - name: rest-project2
+        strip_path: true
+        paths:
+          - "/project2/rest/v1/"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          hide_credentials: false
+
+###
+### Project 3 Routes  
+###
+
+  # REST API for Project 3
+  - name: rest-project3
+    url: http://rest-project3:3000/
+    routes:
+      - name: rest-project3
+        strip_path: true
+        paths:
+          - "/project3/rest/v1/"
+        methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          hide_credentials: false
+
+###
+### Consumers & Authentication
+###
+
+consumers:
+  - username: anon
+    keyauth_credentials:
+      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+  - username: service_role
+    keyauth_credentials:
+      - key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJzZXJ2aWNlX3JvbGUiLAogICAgImlzcyI6ICJzdXBhYmFzZS1kZW1vIiwKICAgICJpYXQiOiAxNjQxNzY5MjAwLAogICAgImV4cCI6IDE3OTk1MzU2MDAKfQ.DaYlNEoUrrEn2Ig7tqibS-PHK5vgusbcbo7X36XVt4Q
+
+###
+### Global Plugins
+###
+
+plugins:
+  - name: cors
+    config:
+      origins:
+        - "*"
+      methods:
+        - GET
+        - HEAD
+        - PUT
+        - PATCH
+        - POST
+        - DELETE
+        - OPTIONS
+        - TRACE
+        - CONNECT
+      headers:
+        - Accept
+        - Accept-Version
+        - Content-Length
+        - Content-MD5
+        - Content-Type
+        - Date
+        - X-Auth-Token
+        - Access-Control-Allow-Origin
+        - Authorization
+        - X-Requested-With
+        - Content-Range
+        - X-Chunked-Output
+        - X-Stream-Output
+        - apikey
+        - prefer
+        - range

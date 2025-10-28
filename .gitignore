@@ -1,0 +1,55 @@
+# Supabase Self-Hosted Deployment
+# Environment variables and secrets
+.env.local
+.env.production
+.env.staging
+
+# Sensitive files
+gcloud.json
+service-account.json
+*.pem
+*.key
+
+# Database backups and volumes
+volumes/db/
+*.sql.backup
+*.dump
+
+# Logs
+logs/
+*.log
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Backup files
+*.backup
+*.bak
+.env.backup
