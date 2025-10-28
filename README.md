@@ -2,6 +2,12 @@
 
 🚀 **Production-ready Supabase self-hosted setup with secure configuration, S3 storage, BigQuery analytics, and multi-cloud deployment scripts for AWS, GCP, and Azure**
 
+## 🎉 **STATUS: FULLY OPERATIONAL ✅**
+
+**Quick Access:** [http://localhost:3000/project/default](http://localhost:3000/project/default)
+
+**Latest Update**: 502 Bad Gateway errors resolved - Studio now fully accessible!
+
 ## ✨ Features
 
 - 🔒 **Security-first**: All secrets generated with cryptographic security
@@ -10,6 +16,26 @@
 - 🤖 **AI Assistant**: OpenAI integration for SQL Editor
 - 💾 **S3 Storage**: AWS S3 backend configuration
 - 🐳 **Containerized**: Docker images for easy deployment
+- ✅ **Studio Access**: Direct port mapping for seamless development
+
+## 🚀 Quick Start
+
+```bash
+# 1. Start all services
+docker-compose up -d
+
+# 2. Access Supabase Studio
+open http://localhost:3000/project/default
+
+# 3. Check service health
+docker-compose ps
+```
+
+### **Access Points:**
+- **Studio Dashboard**: http://localhost:3000/project/default
+- **API Gateway**: http://localhost:8000
+- **PostgREST API**: http://localhost:8000/rest/v1/
+- **Database**: localhost:5432
 
 ## 🏗️ Architecture
 
