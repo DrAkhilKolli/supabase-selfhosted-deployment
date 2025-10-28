@@ -10,10 +10,10 @@ service-account.json
 *.pem
 *.key
 
-# Database backups and volumes
+# Database volumes (exclude to prevent committing actual data)
 volumes/db/
-*.sql.backup
-*.dump
+volumes/db-project3/
+volumes/logs/
 
 # Logs
 logs/
